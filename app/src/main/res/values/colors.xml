@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffca28</color>
+    <color name="colorPrimaryDark">#c79a00</color>
+    <color name="colorAccent">#ffa000</color>
+    <!--<color name="colorHome">##586f88</color>-->
+    <color name="grey">#AAAAAA</color>
+    <color name="white">#FFFFFF</color>
+    <color name="secondWhite">#E0E0E0</color>
+    <color name="black">#000000</color>
+    <color name="clock_grey">#bdc3c7</color>
+    <color name="light_grey">#fbfbfb</color>
+    <color name="hijau_daun">#BED431</color>
+    <color name="font">#333333</color>
+    <color name="colorText">#333333</color>
+    <color name="yellow">#FFDB4E</color>
+    <color name="red">#F44336</color>
+    <color name="blue">#304FFE</color>
+    <color name="orange">#FF9800</color>
+    <color name="green">#76FF03</color>
+    <color name="darkred">#F44336</color>
+
+    <color name="black_overlay">#66000000</color>
+</resources>
