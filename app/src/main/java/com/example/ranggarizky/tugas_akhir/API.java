@@ -2,6 +2,7 @@ package com.example.ranggarizky.tugas_akhir;
 
 import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
+import com.example.ranggarizky.tugas_akhir.model.ResponseDocument;
 import com.example.ranggarizky.tugas_akhir.model.ResponsePost;
 import com.example.ranggarizky.tugas_akhir.model.ResponseTerm;
 import com.google.gson.Gson;
@@ -28,9 +29,8 @@ import retrofit2.http.Query;
  */
 
 public interface API {
-    //variable base URL
-    public static String baseURL = "http://178.128.36.147/api/";
 
+    public static String baseURL = "http://178.128.36.147/api/";
     Gson gson = new GsonBuilder()
             .setLenient()
             .create();
@@ -57,13 +57,16 @@ public interface API {
     public Call<ResponsePost> createTerms(@Header("Authorization")String token,
                                           @Field("project_id")String project_id,
                                           @Field("term")String term,
-                                          @Field("category_id")String category_id
-    );
+                                          @Field("category_id")String category_id);
 
     @GET("terms")
     public Call<ResponseTerm> getTerms(@Header("Authorization")String token,
                                        @Query("page") String page,
                                        @Query("category_id") String category_id);
+
+    @GET("complaints")
+    public Call<ResponseDocument> getComplaints(@Header("Authorization")String token,
+                                                @Query("page") String page);
 
     @GET("categories")
     public Call<List<Category>> getCategories(@Header("Authorization")String token);

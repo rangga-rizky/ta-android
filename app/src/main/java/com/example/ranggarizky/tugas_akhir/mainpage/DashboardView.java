@@ -19,6 +19,7 @@ import java.util.List;
 public interface DashboardView extends BaseView {
     void setMeta(ResponseDashboard dashboard);
     void setpieChart(List<MostCategorized> entries);
+    void toNewDataPage();
     void showProgresBar();
     void hideProgresBar();
     SessionManager getSessionManager();

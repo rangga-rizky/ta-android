@@ -207,6 +207,7 @@
             android:weightSum="2">
 
             <RelativeLayout
+                android:id="@+id/btnToNewPage"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"

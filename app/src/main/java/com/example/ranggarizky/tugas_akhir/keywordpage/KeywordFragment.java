@@ -97,14 +97,6 @@ public class KeywordFragment extends Fragment  implements KeywordView,TermRecycl
         initPresenter();
         onAttachView();
         initRecyclerVIew();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        mAdapter = new TermRecyclerViewAdapter(getActivity(), terms);
-        mAdapter.setOnClick(this);
-        recyclerView.setAdapter(mAdapter);
         spinnerAdapter = new SpinnerCategoryAdapter(
                 getContext(), android.R.layout.simple_spinner_item, categories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -128,8 +120,14 @@ public class KeywordFragment extends Fragment  implements KeywordView,TermRecycl
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        mAdapter = new TermRecyclerViewAdapter(getActivity(), terms);
+        mAdapter.setOnClick(this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @OnTextChanged(value = R.id.editSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)

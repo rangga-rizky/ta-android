@@ -2,6 +2,7 @@ package com.example.ranggarizky.tugas_akhir.mainpage;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranggarizky.tugas_akhir.R;
+import com.example.ranggarizky.tugas_akhir.databarupage.NewDataActivity;
 import com.example.ranggarizky.tugas_akhir.loginpage.LoginPresenter;
 import com.example.ranggarizky.tugas_akhir.model.MostCategorized;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
@@ -33,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -147,6 +150,17 @@ public class DashBoardFragment extends Fragment implements DashboardView {
         pieChart.setData(pieData);
         pieChart.highlightValues(null);
         pieChart.invalidate();
+    }
+
+    @OnClick(R.id.btnToNewPage)
+    public void toNewPage(View view){
+        toNewDataPage();
+    }
+
+    @Override
+    public void toNewDataPage() {
+        Intent intent = new Intent(getActivity(), NewDataActivity.class);
+        startActivity(intent);
     }
 
     @Override
