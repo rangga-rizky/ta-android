@@ -1,6 +1,7 @@
 package com.example.ranggarizky.tugas_akhir.keywordpage;
 
 import com.example.ranggarizky.tugas_akhir.BaseView;
+import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.MostCategorized;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
 import com.example.ranggarizky.tugas_akhir.model.Term;
@@ -14,7 +15,11 @@ import java.util.List;
 
 public interface KeywordView extends BaseView {
     void showProgresBar();
+    void showEmptyResult();
+    void hideEmptyResult();
     void updateRecyclerView(List<Term> terms);
+    void setCategoriesSpinner(List<Category> categories);
+    void deleteReyclerViewItem(int position);
     void hideProgresBar();
     SessionManager getSessionManager();
     void showToast(String message);

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by RanggaRizky on 6/27/2018.
  */
 
-public class ResponseLogin {
+public class ResponsePost {
 
     @SerializedName("success")
     @Expose
@@ -16,6 +16,10 @@ public class ResponseLogin {
     @SerializedName("error")
     @Expose
     private String error;
+
+    @SerializedName("message")
+    @Expose
+    private String message;
 
     @SerializedName("data")
     @Expose
@@ -44,5 +48,13 @@ public class ResponseLogin {
 
     public Token getTokenData() {
         return TokenData;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

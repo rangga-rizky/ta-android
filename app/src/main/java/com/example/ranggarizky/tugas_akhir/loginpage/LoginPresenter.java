@@ -1,12 +1,10 @@
 package com.example.ranggarizky.tugas_akhir.loginpage;
 
-import android.content.Intent;
 import android.util.Log;
 
 import com.example.ranggarizky.tugas_akhir.API;
 import com.example.ranggarizky.tugas_akhir.Presenter;
-import com.example.ranggarizky.tugas_akhir.mainpage.MainActivity;
-import com.example.ranggarizky.tugas_akhir.model.ResponseLogin;
+import com.example.ranggarizky.tugas_akhir.model.ResponsePost;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
 
 import java.io.IOException;
@@ -36,12 +34,12 @@ public class LoginPresenter implements Presenter<LoginView> {
         mView.showProgressdialog();
 
         API apiService = API.client.create(API.class);
-        Call<ResponseLogin> call = apiService.login(username,password);
+        Call<ResponsePost> call = apiService.login(username,password);
 
         //proses call
-        call.enqueue(new Callback<ResponseLogin>() {
+        call.enqueue(new Callback<ResponsePost>() {
             @Override
-            public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+            public void onResponse(Call<ResponsePost> call, Response<ResponsePost> response) {
                 if(response.code() == 200){
                     mView.showToast("Sukses");
                     setSession(response.body());
@@ -61,7 +59,7 @@ public class LoginPresenter implements Presenter<LoginView> {
 
 
             @Override
-            public void onFailure(Call<ResponseLogin> call, Throwable t) {
+            public void onFailure(Call<ResponsePost> call, Throwable t) {
                 Log.e("ayam", "onFailure: ", t.fillInStackTrace());
                 mView.showToast("Failed to Connect Internet");
                 mView.hideProgressdialog();
@@ -70,7 +68,7 @@ public class LoginPresenter implements Presenter<LoginView> {
         });
     }
 
-    private void setSession(ResponseLogin loginObject){
+    private void setSession(ResponsePost loginObject){
         SessionManager sessionManager = mView.getSessionManager();
         sessionManager.setLastLogin(loginObject.getTokenData().getLast_login());
         sessionManager.setToken("Bearer "+loginObject.getTokenData().getToken());

@@ -4,13 +4,9 @@ import android.util.Log;
 
 import com.example.ranggarizky.tugas_akhir.API;
 import com.example.ranggarizky.tugas_akhir.Presenter;
-import com.example.ranggarizky.tugas_akhir.loginpage.LoginView;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
-import com.example.ranggarizky.tugas_akhir.model.ResponseLogin;
-import com.github.mikephil.charting.data.PieEntry;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;

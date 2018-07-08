@@ -1,51 +1,92 @@
 package com.example.ranggarizky.tugas_akhir.keywordpage;
 
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranggarizky.tugas_akhir.R;
+import com.example.ranggarizky.tugas_akhir.createkeywordpage.CreateKeywordActivity;
+import com.example.ranggarizky.tugas_akhir.createkeywordpage.OnSelectCategoryListener;
+import com.example.ranggarizky.tugas_akhir.createkeywordpage.SpinnerCategoryAdapter;
 import com.example.ranggarizky.tugas_akhir.mainpage.DashBoardPresenter;
+import com.example.ranggarizky.tugas_akhir.mainpage.MainActivity;
+import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.Term;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class KeywordFragment extends Fragment  implements KeywordView{
+public class KeywordFragment extends Fragment  implements KeywordView,TermRecyclerViewAdapter.OnItemClicked {
+    private final int SUCCESS = 200;
     KeywordPresenter presenter;
     SessionManager sessionManager;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.txtWarning)
+    TextView txtWarning;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.searchLayout)
-    RelativeLayout searchLayout;
+    @BindView(R.id.editSearch)
+    EditText editSearch;
     private List<Term> terms = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
     private TermRecyclerViewAdapter mAdapter;
+    private SpinnerCategoryAdapter spinnerAdapter;
+    private String currentCategory = "";
 
     public KeywordFragment() {
         // Required empty public constructor
     }
 
+    @OnClick(R.id.fab)
+    public void toCreateTerms(View view){
+        Intent intent = new Intent(getActivity(),CreateKeywordActivity.class);
+        startActivityForResult(intent,SUCCESS);
+    }
+
+    @OnClick(R.id.btnFilter)
+    public void showFilterDialog(View view){
+        CategoryDialog filterDialog =new CategoryDialog(getContext(), spinnerAdapter, new OnSelectCategoryListener() {
+            @Override
+            public void onSelect(String category) {
+                currentCategory = category;
+                presenter.loadData("1",currentCategory);
+            }
+        });
+        filterDialog.show();
+        presenter.loadCategory();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,8 +103,12 @@ public class KeywordFragment extends Fragment  implements KeywordView{
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         mAdapter = new TermRecyclerViewAdapter(getActivity(), terms);
+        mAdapter.setOnClick(this);
         recyclerView.setAdapter(mAdapter);
-        presenter.loadData("1");
+        spinnerAdapter = new SpinnerCategoryAdapter(
+                getContext(), android.R.layout.simple_spinner_item, categories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        presenter.loadData("1",currentCategory);
         return view;
     }
 
@@ -87,6 +132,17 @@ public class KeywordFragment extends Fragment  implements KeywordView{
 
     }
 
+    @OnTextChanged(value = R.id.editSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void editSearchChanged(CharSequence text) {
+        currentCategory = "";
+        if(text.length() > 2){
+            presenter.searchKeyword(text.toString());
+        }else if(text.length() == 0){
+            hideEmptyResult();
+            presenter.loadData("1",currentCategory);
+        }
+    }
+
     @Override
     public void onAttachView() {
         presenter.onAttach(this);
@@ -104,9 +160,21 @@ public class KeywordFragment extends Fragment  implements KeywordView{
 
     @Override
     public void showProgresBar() {
-        searchLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
+        editSearch.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showEmptyResult() {
+        txtWarning.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideEmptyResult() {
+        txtWarning.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -117,10 +185,27 @@ public class KeywordFragment extends Fragment  implements KeywordView{
     }
 
     @Override
+    public void setCategoriesSpinner(List<Category> categories) {
+        this.categories.clear();
+        Category allCategory = new Category();
+        allCategory.setId("");
+        allCategory.setCategory("Semua Kategori");
+        this.categories.add(allCategory);
+        this.categories.addAll(categories);
+        spinnerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void deleteReyclerViewItem(int position) {
+        this.terms.remove(position);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void hideProgresBar() {
-        progressBar.setVisibility(View.GONE);
+        editSearch.setEnabled(true);
         recyclerView.setVisibility(View.VISIBLE);
-        searchLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
     @Override
     public SessionManager getSessionManager(){
@@ -134,4 +219,28 @@ public class KeywordFragment extends Fragment  implements KeywordView{
         super.onDestroy();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == SUCCESS){
+            showToast("Kata Baru berhasil ditambahkan");
+            currentCategory = "";
+            presenter.loadData("1",currentCategory);
+        }
+    }
+
+    @Override
+    public void onItemClick(final int position) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Hapus Kata kunci")
+                .setMessage("Apakah anda yakin?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Term term = terms.get(position);
+                        presenter.deleteTerms(term.getId(),position);
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+    }
 }
