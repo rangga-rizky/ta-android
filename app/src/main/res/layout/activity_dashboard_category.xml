@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.example.ranggarizky.tugas_akhir.mainpage.MainActivity">
+    tools:context="com.example.ranggarizky.tugas_akhir.databarupage.NewDataActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
@@ -39,77 +39,58 @@
                 android:textSize="22.4sp"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:textColor="@color/white"
-                android:text="Setting"/>
+                android:text="Dashboard Kategori"/>
+
 
         </RelativeLayout>
+
+
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_gravity="center" />
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="16dp"
-            android:id="@+id/btnCategory"
             android:layout_width="match_parent"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/light_grey"
+            android:background="@color/secondWhite"
+            android:padding="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_marginTop="2dp"
-                android:id="@+id/category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_grey_category_24px"/>
-
             <TextView
-                android:layout_toEndOf="@+id/category"
-                android:layout_marginLeft="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                android:textSize="18sp"
-                android:text="Daftar Kategori"
-                android:layout_toRightOf="@+id/category" />
-
+                android:text="Pilih Kategori"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            app:layout_constraintTop_toBottomOf="@+id/btnCategory"
-            android:layout_marginTop="6dp"
-            android:id="@+id/btnLogout"
+        <android.support.v7.widget.RecyclerView
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingBottom="8dp"
+            android:background="@color/secondWhite"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/light_grey"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+        </android.support.v7.widget.RecyclerView>
 
-            <ImageView
-                android:layout_marginTop="2dp"
-                android:id="@+id/logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_sign_out_alt_solid"/>
-
-            <TextView
-                android:layout_toEndOf="@+id/logout"
-                android:layout_marginLeft="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                android:textSize="18sp"
-                android:text="Log out"
-                android:layout_toRightOf="@+id/logout" />
-
-        </RelativeLayout>
 
     </android.support.constraint.ConstraintLayout>
 
 
 
 </android.support.design.widget.CoordinatorLayout>
-
-

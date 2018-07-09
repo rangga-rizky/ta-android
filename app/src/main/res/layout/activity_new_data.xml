@@ -70,7 +70,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -100,19 +100,19 @@
 
                 <TextView
                     android:id="@+id/JumlahData"
-                    app:layout_constraintRight_toLeftOf="@+id/separator"
+                    app:layout_constraintLeft_toRightOf="@+id/separator"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jumlah Data"/>
 
                 <TextView
-                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/JumlahData"
-                    app:layout_constraintRight_toLeftOf="@+id/separator"
                     android:id="@+id/txtJumlahData"
+                    app:layout_constraintLeft_toRightOf="@+id/separator"
+                    app:layout_constraintRight_toRightOf="parent"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,8 +121,8 @@
                 <TextView
                     android:id="@+id/lastData"
                     app:layout_constraintTop_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/separator"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/separator"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,10 +130,10 @@
 
                 <TextView
                     android:gravity="center"
-                    app:layout_constraintLeft_toRightOf="@+id/separator"
                     app:layout_constraintTop_toBottomOf="@+id/lastData"
-                    app:layout_constraintRight_toRightOf="parent"
                     android:id="@+id/txtlastData"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/separator"
                     android:textStyle="bold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

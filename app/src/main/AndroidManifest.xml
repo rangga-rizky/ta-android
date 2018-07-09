@@ -21,7 +21,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".createkeywordpage.CreateKeywordActivity" />
-        <activity android:name=".databarupage.NewDataActivity"></activity>
+        <activity android:name=".databarupage.NewDataActivity" />
+        <activity android:name=".categorypage.CategoryActivity" />
+        <activity
+            android:name=".Category2Activity"
+            android:label="@string/title_activity_category2"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".createcategorypage.CreateCategoryActivity" />
+        <activity android:name=".dashboardcategorypage.DashBoardCategoryActivity"></activity>
     </application>
 
 </manifest>

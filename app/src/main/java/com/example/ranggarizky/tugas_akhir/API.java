@@ -59,6 +59,12 @@ public interface API {
                                           @Field("term")String term,
                                           @Field("category_id")String category_id);
 
+    @FormUrlEncoded
+    @POST("categories")
+    public Call<ResponsePost> createCategory(@Header("Authorization")String token,
+                                          @Field("project_id")String project_id,
+                                          @Field("category")String category);
+
     @GET("terms")
     public Call<ResponseTerm> getTerms(@Header("Authorization")String token,
                                        @Query("page") String page,
@@ -76,5 +82,8 @@ public interface API {
 
     @DELETE("terms/{id}")
     public Call<ResponsePost> deleteTerms(@Header("Authorization")String token, @Path("id") String id);
+
+    @DELETE("categories/{id}")
+    public Call<ResponsePost> deleteCategories(@Header("Authorization")String token, @Path("id") String id);
 
 }

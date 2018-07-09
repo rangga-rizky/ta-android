@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranggarizky.tugas_akhir.R;
+import com.example.ranggarizky.tugas_akhir.dashboardcategorypage.DashBoardCategoryActivity;
+import com.example.ranggarizky.tugas_akhir.dashboardcategorypage.DashboardCategoryView;
 import com.example.ranggarizky.tugas_akhir.databarupage.NewDataActivity;
 import com.example.ranggarizky.tugas_akhir.loginpage.LoginPresenter;
 import com.example.ranggarizky.tugas_akhir.model.MostCategorized;
@@ -157,9 +159,20 @@ public class DashBoardFragment extends Fragment implements DashboardView {
         toNewDataPage();
     }
 
+    @OnClick(R.id.btnToDashboardCategory)
+    public void toDashboardCategory(View view){
+        toDashboardCategory();
+    }
+
     @Override
     public void toNewDataPage() {
         Intent intent = new Intent(getActivity(), NewDataActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void toDashboardCategory() {
+        Intent intent = new Intent(getActivity(), DashBoardCategoryActivity.class);
         startActivity(intent);
     }
 

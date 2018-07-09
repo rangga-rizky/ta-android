@@ -20,6 +20,7 @@ public interface DashboardView extends BaseView {
     void setMeta(ResponseDashboard dashboard);
     void setpieChart(List<MostCategorized> entries);
     void toNewDataPage();
+    void toDashboardCategory();
     void showProgresBar();
     void hideProgresBar();
     SessionManager getSessionManager();

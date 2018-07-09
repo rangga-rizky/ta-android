@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.ranggarizky.tugas_akhir.R;
+import com.example.ranggarizky.tugas_akhir.categorypage.CategoryActivity;
 import com.example.ranggarizky.tugas_akhir.loginpage.LoginActivity;
 import com.example.ranggarizky.tugas_akhir.mainpage.DashBoardPresenter;
 import com.example.ranggarizky.tugas_akhir.mainpage.MainActivity;
@@ -85,6 +86,12 @@ public class SettingFragment extends Fragment implements SettingView {
     }
 
     @Override
+    public void toCategoryListScreen() {
+        Intent intent = new Intent(getActivity(),CategoryActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public SessionManager getSessionManager() {
         return sessionManager;
     }
@@ -98,5 +105,10 @@ public class SettingFragment extends Fragment implements SettingView {
     @OnClick(R.id.btnLogout)
     public void onClikcLogout(){
         presenter.logout();
+    }
+
+    @OnClick(R.id.btnCategory)
+    public void onCLickCategory(){
+        toCategoryListScreen();
     }
 }
