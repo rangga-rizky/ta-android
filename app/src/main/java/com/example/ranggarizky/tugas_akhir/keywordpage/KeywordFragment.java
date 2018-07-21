@@ -7,33 +7,25 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranggarizky.tugas_akhir.R;
 import com.example.ranggarizky.tugas_akhir.createkeywordpage.CreateKeywordActivity;
-import com.example.ranggarizky.tugas_akhir.createkeywordpage.OnSelectCategoryListener;
+import com.example.ranggarizky.tugas_akhir.OnSelectCategoryListener;
 import com.example.ranggarizky.tugas_akhir.createkeywordpage.SpinnerCategoryAdapter;
-import com.example.ranggarizky.tugas_akhir.mainpage.DashBoardPresenter;
-import com.example.ranggarizky.tugas_akhir.mainpage.MainActivity;
 import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.Paginator;
 import com.example.ranggarizky.tugas_akhir.model.Term;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,8 +75,9 @@ public class KeywordFragment extends Fragment  implements KeywordView,TermRecycl
     public void showFilterDialog(View view){
         CategoryDialog filterDialog =new CategoryDialog(getContext(), spinnerAdapter, new OnSelectCategoryListener() {
             @Override
-            public void onSelect(String category) {
-                currentCategory = category;
+            public void onSelect(Category category) {
+                currentCategory = category.getId();
+                currentPage = 1;
                 presenter.loadData("1",currentCategory);
             }
         });

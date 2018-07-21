@@ -5,10 +5,12 @@ import android.util.Log;
 import com.example.ranggarizky.tugas_akhir.API;
 import com.example.ranggarizky.tugas_akhir.Presenter;
 import com.example.ranggarizky.tugas_akhir.keywordpage.KeywordView;
+import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDocument;
 import com.example.ranggarizky.tugas_akhir.model.ResponseTerm;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,13 +33,13 @@ public class NewDataPresenter implements Presenter<NewDataView> {
         mView = null;
     }
 
-    public void loadData(final String page){
+    public void loadData(final String page,String category_id){
         if(page == "1"){
             mView.showProgresBar();
         }
         mView.setPending(true);
         API apiService = API.client.create(API.class);
-        Call<ResponseDocument> call = apiService.getComplaints(mView.getSessionManager().getToken(),page);
+        Call<ResponseDocument> call = apiService.getComplaints(mView.getSessionManager().getToken(),page,category_id);
 
         //proses call
         call.enqueue(new Callback<ResponseDocument>() {
@@ -77,6 +79,40 @@ public class NewDataPresenter implements Presenter<NewDataView> {
             }
         });
 
+    }
+
+    public void loadCategory(){
+        API apiService = API.client.create(API.class);
+        Call<List<Category>> call = apiService.getCategories(mView.getSessionManager().getToken());
+
+        //proses call
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if(mView!=null){
+                    if(response.code() == 200){
+                        mView.setCategoriesSpinner(response.body());
+                    }else if(response.code() == 401){
+                        mView.showToast("Token Expired");
+                    }else{
+                        try {
+                            Log.d("ayam",response.errorBody().string().toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        mView.showToast("Terdapat Kesalhan pada Server");
+                    }
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.e("ayam", "onFailure: ", t.fillInStackTrace());
+                mView.showToast("Failed to Connect Internet");
+
+            }
+        });
     }
 }
 

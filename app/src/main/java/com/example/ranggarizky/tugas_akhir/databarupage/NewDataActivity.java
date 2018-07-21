@@ -3,7 +3,6 @@ package com.example.ranggarizky.tugas_akhir.databarupage;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,13 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranggarizky.tugas_akhir.R;
-import com.example.ranggarizky.tugas_akhir.keywordpage.KeywordPresenter;
-import com.example.ranggarizky.tugas_akhir.keywordpage.TermRecyclerViewAdapter;
+import com.example.ranggarizky.tugas_akhir.OnSelectCategoryListener;
+import com.example.ranggarizky.tugas_akhir.createkeywordpage.SpinnerCategoryAdapter;
+import com.example.ranggarizky.tugas_akhir.keywordpage.CategoryDialog;
 import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.Document;
 import com.example.ranggarizky.tugas_akhir.model.DocumentMeta;
 import com.example.ranggarizky.tugas_akhir.model.Paginator;
-import com.example.ranggarizky.tugas_akhir.model.Term;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 
@@ -27,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     NewDataPresenter presenter;
@@ -43,6 +43,9 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     FloatingActionButton fab;
     LinearLayoutManager layoutManager;
     private boolean isPending;
+    private String currentCategory = "";
+    private List<Category> categories = new ArrayList<>();
+    private SpinnerCategoryAdapter spinnerAdapter;
     private int maxItemsPerRequest = 35,currentPage = 1,totalPage = 2;
     private List<Document> documents = new ArrayList<>();
     private DocumentRecyclerViewAdapter mAdapter;
@@ -56,7 +59,10 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
         initPresenter();
         onAttachView();
         initRecyclerVIew();
-        presenter.loadData("1");
+        spinnerAdapter = new SpinnerCategoryAdapter(
+                this, android.R.layout.simple_spinner_item, categories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        presenter.loadData("1",currentCategory);
     }
 
     private void initRecyclerVIew(){
@@ -82,7 +88,7 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
         return new InfiniteScrollListener(maxItemsPerRequest, layoutManager) {
             @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
                 if (currentPage < totalPage && !isPending) {
-                    presenter.loadData(String.valueOf(currentPage));
+                    presenter.loadData(String.valueOf(currentPage),currentCategory);
                 }
             }
         };
@@ -127,6 +133,22 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
         mAdapter.notifyDataSetChanged();
     }
 
+    @OnClick(R.id.btnFilter)
+    public void showFilterDialog(View view){
+        CategoryDialog filterDialog =new CategoryDialog(this, spinnerAdapter, new OnSelectCategoryListener() {
+            @Override
+            public void onSelect(Category category) {
+                currentCategory = category.getCategory();
+                currentPage = 1;
+                presenter.loadData("1",currentCategory);
+            }
+        });
+        filterDialog.show();
+        presenter.loadCategory();
+
+    }
+
+
 
     @Override
     public void setMetaData(DocumentMeta data) {
@@ -144,6 +166,17 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     public void showProgresBar() {
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setCategoriesSpinner(List<Category> categories) {
+        this.categories.clear();
+        Category allCategory = new Category();
+        allCategory.setId("");
+        allCategory.setCategory("Semua Kategori");
+        this.categories.add(allCategory);
+        this.categories.addAll(categories);
+        spinnerAdapter.notifyDataSetChanged();
     }
 
     @Override

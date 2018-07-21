@@ -20,6 +20,7 @@ public interface NewDataView extends BaseView {
     void updateRecyclerView(List<Document> documents);
     void setMetaData(DocumentMeta data);
     void hideProgresBar();
+    void setCategoriesSpinner(List<Category> categories);
     void setTotalPage(Paginator paginator);
     void setPending(Boolean isPending);
     SessionManager getSessionManager();

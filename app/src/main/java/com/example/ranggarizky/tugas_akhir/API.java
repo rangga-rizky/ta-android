@@ -85,7 +85,8 @@ public interface API {
 
     @GET("complaints")
     public Call<ResponseDocument> getComplaints(@Header("Authorization")String token,
-                                                @Query("page") String page);
+                                                @Query("page") String page,
+                                                @Query("category_id") String category_id);
 
     @GET("categories")
     public Call<List<Category>> getCategories(@Header("Authorization")String token);

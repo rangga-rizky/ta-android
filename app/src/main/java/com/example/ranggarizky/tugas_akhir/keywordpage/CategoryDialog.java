@@ -1,6 +1,5 @@
 package com.example.ranggarizky.tugas_akhir.keywordpage;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,11 +9,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.ranggarizky.tugas_akhir.R;
-import com.example.ranggarizky.tugas_akhir.createkeywordpage.OnSelectCategoryListener;
+import com.example.ranggarizky.tugas_akhir.OnSelectCategoryListener;
 import com.example.ranggarizky.tugas_akhir.createkeywordpage.SpinnerCategoryAdapter;
 import com.example.ranggarizky.tugas_akhir.model.Category;
-
-import java.util.List;
 
 /**
  * Created by RanggaRizky on 7/8/2018.
@@ -52,7 +49,7 @@ public class CategoryDialog  extends Dialog implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.btnPilih:
                 Category selected = (Category) spinnerCategory.getSelectedItem();
-                onSelectCategoryListener.onSelect(selected.getId());
+                onSelectCategoryListener.onSelect(selected);
                 dismiss();
                 break;
             default:
