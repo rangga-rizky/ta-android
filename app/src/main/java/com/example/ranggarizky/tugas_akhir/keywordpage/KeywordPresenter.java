@@ -36,8 +36,11 @@ public class KeywordPresenter implements Presenter<KeywordView> {
         mView = null;
     }
 
-    public void loadData(String page,String category){
-            mView.showProgresBar();
+    public void loadData(final String page, String category){
+            if(page == "1"){
+                mView.showProgresBar();
+            }
+            mView.setPending(true);
             API apiService = API.client.create(API.class);
             Call<ResponseTerm> call = apiService.getTerms(mView.getSessionManager().getToken(),page,category);
 
@@ -46,8 +49,14 @@ public class KeywordPresenter implements Presenter<KeywordView> {
                 @Override
                 public void onResponse(Call<ResponseTerm> call, Response<ResponseTerm> response) {
                     if(mView!=null){
+                        mView.setPending(false);
                         if(response.code() == 200){
-                            mView.updateRecyclerView(response.body().getData());
+                            mView.setTotalPage(response.body().getPaginator());
+                            if(page != "1"){
+                                mView.updateRecyclerView(response.body().getData());
+                            }else{
+                                mView.setRecyclerView(response.body().getData());
+                            }
                         }else if(response.code() == 401){
                             mView.showToast("Token Expired");
                         }else{
@@ -68,7 +77,7 @@ public class KeywordPresenter implements Presenter<KeywordView> {
                     Log.e("ayam", "onFailure: ", t.fillInStackTrace());
                     mView.showToast("Failed to Connect Internet");
                     mView.hideProgresBar();
-
+                    mView.setPending(false);
                 }
             });
 
@@ -93,7 +102,7 @@ public class KeywordPresenter implements Presenter<KeywordView> {
                             }else{
                                 mView.showEmptyResult();
                             }
-                            mView.updateRecyclerView(responseData);
+                            mView.setRecyclerView(responseData);
                         } else if (response.code() == 401) {
                             mView.showToast("Token Expired");
                         } else {

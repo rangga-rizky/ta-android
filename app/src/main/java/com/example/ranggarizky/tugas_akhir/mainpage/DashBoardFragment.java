@@ -19,17 +19,24 @@ import com.example.ranggarizky.tugas_akhir.dashboardcategorypage.DashBoardCatego
 import com.example.ranggarizky.tugas_akhir.dashboardcategorypage.DashboardCategoryView;
 import com.example.ranggarizky.tugas_akhir.databarupage.NewDataActivity;
 import com.example.ranggarizky.tugas_akhir.loginpage.LoginPresenter;
+import com.example.ranggarizky.tugas_akhir.model.FreqData;
 import com.example.ranggarizky.tugas_akhir.model.MostCategorized;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.util.ArrayList;
@@ -62,6 +69,8 @@ public class DashBoardFragment extends Fragment implements DashboardView {
     TextView txtLastLogin;
     @BindView(R.id.mainLayout)
     ConstraintLayout mainLayout;
+    @BindView(R.id.lineChart)
+    LineChart lineChart;
     SessionManager sessionManager;
 
     public DashBoardFragment() {
@@ -174,6 +183,51 @@ public class DashBoardFragment extends Fragment implements DashboardView {
     public void toDashboardCategory() {
         Intent intent = new Intent(getActivity(), DashBoardCategoryActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void setLineChart(final FreqData data) {
+        ArrayList<Entry> lineEntries = new ArrayList<Entry>();
+        for(int i =0 ; i < data.getLabels().size(); i++){
+            lineEntries.add(new Entry(i, data.getValues().get(i)));
+        }
+
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "Jumlah Data Masuk");
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSet.setHighlightEnabled(true);
+        lineDataSet.setColor(getResources().getColor(R.color.colorAccent));
+        lineDataSet.setLineWidth(2);
+        lineDataSet.setCircleRadius(6);
+        lineDataSet.setCircleHoleRadius(3);
+        lineDataSet.setDrawHighlightIndicators(true);
+        lineDataSet.setHighLightColor(Color.RED);
+        lineDataSet.setValueTextSize(12);
+        LineData lineData = new LineData(lineDataSet);
+
+
+        //  lineChart.getDescription().setText("Price in last 12 days");
+        // lineChart.getDescription().setTextSize(12);
+        lineChart.setDrawMarkers(true);
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getXAxis().setLabelRotationAngle(-30f);
+        lineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (value >= 0) {
+                    if (value <= data.getLabels().size() - 1) {
+                        return data.getLabels().get((int) value);
+                    }
+                    return "";
+                }
+                return "";
+            }
+        });
+        lineChart.animateY(1000);
+        lineChart.getXAxis().setGranularityEnabled(true);
+        lineChart.getXAxis().setGranularity(1.0f);
+        lineChart.getXAxis().setLabelCount(lineDataSet.getEntryCount());
+        lineChart.setData(lineData);
     }
 
     @Override

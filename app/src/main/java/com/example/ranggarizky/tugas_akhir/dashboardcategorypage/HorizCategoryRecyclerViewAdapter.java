@@ -1,6 +1,7 @@
 package com.example.ranggarizky.tugas_akhir.dashboardcategorypage;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class HorizCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Horiz
     public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.txtCategory)
         TextView txtCategory;
+        @BindView(R.id.mainLayout)
+        CardView mainLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -59,6 +62,12 @@ public class HorizCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Horiz
     public void onBindViewHolder(HorizCategoryRecyclerViewAdapter.ViewHolder holder, final int position) {
         final Category item = datalist.get(position);
         holder.txtCategory.setText(item.getCategory());
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClick.onItemClick(position);
+            }
+        });
     }
 
     public void setOnClick(OnItemClicked onClick)

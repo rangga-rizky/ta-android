@@ -28,8 +28,10 @@ import com.example.ranggarizky.tugas_akhir.createkeywordpage.SpinnerCategoryAdap
 import com.example.ranggarizky.tugas_akhir.mainpage.DashBoardPresenter;
 import com.example.ranggarizky.tugas_akhir.mainpage.MainActivity;
 import com.example.ranggarizky.tugas_akhir.model.Category;
+import com.example.ranggarizky.tugas_akhir.model.Paginator;
 import com.example.ranggarizky.tugas_akhir.model.Term;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
+import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 
 import org.w3c.dom.Text;
 
@@ -58,6 +60,9 @@ public class KeywordFragment extends Fragment  implements KeywordView,TermRecycl
     ProgressBar progressBar;
     @BindView(R.id.editSearch)
     EditText editSearch;
+    LinearLayoutManager layoutManager;
+    private boolean isPending;
+    private int maxItemsPerRequest = 15,currentPage = 1,totalPage = 2;
     private List<Term> terms = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
     private TermRecyclerViewAdapter mAdapter;
@@ -120,14 +125,23 @@ public class KeywordFragment extends Fragment  implements KeywordView,TermRecycl
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.addOnScrollListener(createInfiniteScrollListener());
         mAdapter = new TermRecyclerViewAdapter(getActivity(), terms);
         mAdapter.setOnClick(this);
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private InfiniteScrollListener createInfiniteScrollListener() {
+        return new InfiniteScrollListener(maxItemsPerRequest, layoutManager) {
+            @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
+                if (currentPage < totalPage && !isPending) {
+                    presenter.loadData(String.valueOf(currentPage),currentCategory);
+                }
+            }
+        };
     }
 
     @OnTextChanged(value = R.id.editSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -176,8 +190,25 @@ public class KeywordFragment extends Fragment  implements KeywordView,TermRecycl
     }
 
     @Override
-    public void updateRecyclerView(List<Term> terms) {
+    public void setPending(Boolean isPending) {
+        this.isPending = isPending;
+    }
+
+    @Override
+    public void setTotalPage(Paginator paginator) {
+        totalPage = paginator.getTotalPages();
+        currentPage++;
+    }
+
+    @Override
+    public void setRecyclerView(List<Term> terms) {
         this.terms.clear();
+        this.terms.addAll(terms);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateRecyclerView(List<Term> terms) {
         this.terms.addAll(terms);
         mAdapter.notifyDataSetChanged();
     }

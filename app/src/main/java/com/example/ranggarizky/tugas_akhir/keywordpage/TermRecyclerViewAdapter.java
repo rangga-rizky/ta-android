@@ -45,6 +45,8 @@ public class TermRecyclerViewAdapter extends RecyclerView.Adapter<TermRecyclerVi
         TextView txtTerm;
         @BindView(R.id.txtCategory)
         TextView txtCategory;
+        @BindView(R.id.txtScore)
+        TextView txtScore;
         @BindView(R.id.btnDelete)
         ImageView btnDelete;
 
@@ -74,6 +76,7 @@ public class TermRecyclerViewAdapter extends RecyclerView.Adapter<TermRecyclerVi
     public void onBindViewHolder(TermRecyclerViewAdapter.ViewHolder holder, final int position) {
         final Term item = datalist.get(position);
         holder.txtTerm.setText(item.getTerm());
+        holder.txtScore.setText(String.valueOf(item.getScore()));
         holder.txtCategory.setText(item.getCategory());
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override

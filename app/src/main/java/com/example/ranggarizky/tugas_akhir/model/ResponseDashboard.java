@@ -27,6 +27,10 @@ public class ResponseDashboard {
     @Expose
     private List<MostCategorized> mostCategorized = null;
 
+    @SerializedName("complaint_freq")
+    @Expose
+    private FreqData freqData;
+
     @SerializedName("distCategory")
     @Expose
     private List<MostCategorized> distCategory = null;
@@ -81,5 +85,11 @@ public class ResponseDashboard {
         return distCategory;
     }
 
+    public void setFreqData(FreqData freqData) {
+        this.freqData = freqData;
+    }
 
+    public FreqData getFreqData() {
+        return freqData;
+    }
 }

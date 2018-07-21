@@ -1,10 +1,13 @@
 package com.example.ranggarizky.tugas_akhir;
 
 import com.example.ranggarizky.tugas_akhir.model.Category;
+import com.example.ranggarizky.tugas_akhir.model.FreqData;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
+import com.example.ranggarizky.tugas_akhir.model.ResponseDashboardCategory;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDocument;
 import com.example.ranggarizky.tugas_akhir.model.ResponsePost;
 import com.example.ranggarizky.tugas_akhir.model.ResponseTerm;
+import com.example.ranggarizky.tugas_akhir.model.TopWords;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -52,12 +55,22 @@ public interface API {
     @GET("mobile/dashboard")
     public Call<ResponseDashboard> dashboard(@Header("Authorization")String token);
 
+    @GET("dashboard/{slug}/all")
+    public Call<ResponseDashboardCategory> getDashboardCategory(@Header("Authorization")String token, @Path("slug") String slug);
+
+    @GET("dashboard/{slug}/frekuensi")
+    public Call<FreqData> getCategoryFreq(@Header("Authorization")String token,@Path("slug") String slug);
+
+    @GET("dashboard/{slug}/top-words")
+    public Call<List<TopWords>> getTopWords(@Header("Authorization")String token, @Path("slug") String slug);
+
     @FormUrlEncoded
-    @POST("terms")
+    @POST("training-terms")
     public Call<ResponsePost> createTerms(@Header("Authorization")String token,
                                           @Field("project_id")String project_id,
                                           @Field("term")String term,
-                                          @Field("category_id")String category_id);
+                                          @Field("category_id")String category_id,
+                                          @Field("score")String score);
 
     @FormUrlEncoded
     @POST("categories")
@@ -65,7 +78,7 @@ public interface API {
                                           @Field("project_id")String project_id,
                                           @Field("category")String category);
 
-    @GET("terms")
+    @GET("training-terms")
     public Call<ResponseTerm> getTerms(@Header("Authorization")String token,
                                        @Query("page") String page,
                                        @Query("category_id") String category_id);
@@ -77,13 +90,17 @@ public interface API {
     @GET("categories")
     public Call<List<Category>> getCategories(@Header("Authorization")String token);
 
-    @GET("terms/search/{q}")
+    @GET("training-terms/search/{q}")
     public Call<ResponseTerm> searcHterms(@Header("Authorization")String token, @Path("q") String page);
 
-    @DELETE("terms/{id}")
+    @DELETE("training-terms/{id}")
     public Call<ResponsePost> deleteTerms(@Header("Authorization")String token, @Path("id") String id);
 
     @DELETE("categories/{id}")
     public Call<ResponsePost> deleteCategories(@Header("Authorization")String token, @Path("id") String id);
+
+    @FormUrlEncoded
+    @POST("tweets/crawl/LAPOR1708")
+    public Call<ResponsePost> crawl();
 
 }

@@ -17,8 +17,10 @@ import com.example.ranggarizky.tugas_akhir.keywordpage.TermRecyclerViewAdapter;
 import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.Document;
 import com.example.ranggarizky.tugas_akhir.model.DocumentMeta;
+import com.example.ranggarizky.tugas_akhir.model.Paginator;
 import com.example.ranggarizky.tugas_akhir.model.Term;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
+import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,11 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     TextView txtjumlahData;
     @BindView(R.id.txtlastData)
     TextView txtlastData;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    LinearLayoutManager layoutManager;
+    private boolean isPending;
+    private int maxItemsPerRequest = 35,currentPage = 1,totalPage = 2;
     private List<Document> documents = new ArrayList<>();
     private DocumentRecyclerViewAdapter mAdapter;
 
@@ -53,13 +60,43 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     }
 
     private void initRecyclerVIew(){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if(dy > 0){
+                    fab.hide();
+                } else{
+                    fab.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.addOnScrollListener(createInfiniteScrollListener());
         mAdapter = new DocumentRecyclerViewAdapter(this, documents);
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private InfiniteScrollListener createInfiniteScrollListener() {
+        return new InfiniteScrollListener(maxItemsPerRequest, layoutManager) {
+            @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
+                if (currentPage < totalPage && !isPending) {
+                    presenter.loadData(String.valueOf(currentPage));
+                }
+            }
+        };
+    }
+
+    @Override
+    public void setPending(Boolean isPending) {
+        this.isPending = isPending;
+    }
+
+    @Override
+    public void setTotalPage(Paginator paginator) {
+        totalPage = paginator.getTotalPages();
+        currentPage++;
     }
 
     private void initPresenter() {
@@ -78,10 +115,18 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
 
     @Override
     public void updateRecyclerView(List<Document> documents) {
+        this.documents.addAll(documents);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void setRecyclerView(List<Document> documents) {
         this.documents.clear();
         this.documents.addAll(documents);
         mAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void setMetaData(DocumentMeta data) {

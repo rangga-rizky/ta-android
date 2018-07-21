@@ -31,8 +31,11 @@ public class NewDataPresenter implements Presenter<NewDataView> {
         mView = null;
     }
 
-    public void loadData(String page){
-        mView.showProgresBar();
+    public void loadData(final String page){
+        if(page == "1"){
+            mView.showProgresBar();
+        }
+        mView.setPending(true);
         API apiService = API.client.create(API.class);
         Call<ResponseDocument> call = apiService.getComplaints(mView.getSessionManager().getToken(),page);
 
@@ -41,8 +44,14 @@ public class NewDataPresenter implements Presenter<NewDataView> {
             @Override
             public void onResponse(Call<ResponseDocument> call, Response<ResponseDocument> response) {
                 if(mView!=null){
+                    mView.setPending(false);
                     if(response.code() == 200){
-                        mView.updateRecyclerView(response.body().getData());
+                        if(page != "1"){
+                            mView.updateRecyclerView(response.body().getData());
+                        }else{
+                            mView.setRecyclerView(response.body().getData());
+                        }
+                        mView.setTotalPage(response.body().getPaginator());
                         mView.setMetaData(response.body().getMeta());
                     }else if(response.code() == 401){
                         mView.showToast("Token Expired");
@@ -64,7 +73,7 @@ public class NewDataPresenter implements Presenter<NewDataView> {
                 Log.e("ayam", "onFailure: ", t.fillInStackTrace());
                 mView.showToast("Failed to Connect Internet");
                 mView.hideProgresBar();
-
+                mView.setPending(false);
             }
         });
 

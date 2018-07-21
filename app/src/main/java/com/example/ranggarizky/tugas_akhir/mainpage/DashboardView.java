@@ -3,6 +3,7 @@ package com.example.ranggarizky.tugas_akhir.mainpage;
 import android.widget.TextView;
 
 import com.example.ranggarizky.tugas_akhir.BaseView;
+import com.example.ranggarizky.tugas_akhir.model.FreqData;
 import com.example.ranggarizky.tugas_akhir.model.MostCategorized;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDashboard;
 import com.example.ranggarizky.tugas_akhir.utils.SessionManager;
@@ -21,6 +22,7 @@ public interface DashboardView extends BaseView {
     void setpieChart(List<MostCategorized> entries);
     void toNewDataPage();
     void toDashboardCategory();
+    void setLineChart(FreqData data);
     void showProgresBar();
     void hideProgresBar();
     SessionManager getSessionManager();

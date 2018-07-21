@@ -31,11 +31,11 @@ public class CreateKeywordPresenter implements Presenter<CreateKeywordView> {
         mView = null;
     }
 
-    public void submitData(String term,String category_id){
+    public void submitData(String term,String category_id,String score){
         mView.showProgressdialog();
 
         API apiService = API.client.create(API.class);
-        Call<ResponsePost> call = apiService.createTerms(mView.getSessionManager().getToken(),"1",term,category_id);
+        Call<ResponsePost> call = apiService.createTerms(mView.getSessionManager().getToken(),"1",term,category_id,score);
 
         //proses call
         call.enqueue(new Callback<ResponsePost>() {

@@ -65,7 +65,65 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <ScrollView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/txtCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text=""/>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:layout_below="@+id/txtCategory"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp">
+
+
+                </com.github.mikephil.charting.charts.LineChart>
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_below="@+id/lineChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/black"
+                    android:text="Word Cloud"/>
+
+                <WebView android:id="@+id/webView"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_below="@+id/webView"/>
+
+            </RelativeLayout>
+
+
+        </ScrollView>
+
         <RelativeLayout
+            android:id="@+id/textlayout"
             android:layout_width="match_parent"
             android:background="@color/secondWhite"
             android:padding="8dp"

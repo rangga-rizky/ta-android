@@ -12,6 +12,10 @@ public class Term {
     @Expose
     private String term;
 
+    @SerializedName("score")
+    @Expose
+    private int score;
+
     @SerializedName("category")
     @Expose
     private String category;
@@ -43,5 +47,13 @@ public class Term {
 
     public String getId() {
         return id;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

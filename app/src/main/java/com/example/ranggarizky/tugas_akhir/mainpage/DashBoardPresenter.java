@@ -41,6 +41,7 @@ public class DashBoardPresenter implements Presenter<DashboardView> {
                public void onResponse(Call<ResponseDashboard> call, Response<ResponseDashboard> response) {
                    if(response.code() == 200){
                        mView.setMeta(response.body());
+                       mView.setLineChart(response.body().getFreqData());
                        mView.setpieChart(response.body().getDistCategory());
                    }else if(response.code() == 401){
                        mView.showToast("Token Expired");

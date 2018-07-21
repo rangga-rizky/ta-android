@@ -31,12 +31,16 @@ public class CreateKeywordActivity extends AppCompatActivity implements  CreateK
     private SessionManager sessionManager;
     private ProgressDialog progressDialog;
     private List<Category> categoryOptions;
+    private List<String> scoreOptions;
     private final int SUCCESS = 200;
     @BindView(R.id.editKeyword)
     EditText editKeyword;
     @BindView(R.id.spinnerCategory)
     Spinner spinnerCategory;
+    @BindView(R.id.spinnerScore)
+    Spinner spinnerScore;
     private SpinnerCategoryAdapter adapter;
+    private ArrayAdapter<String> scoreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class CreateKeywordActivity extends AppCompatActivity implements  CreateK
         categoryOptions = new ArrayList<>();
         initPresenter();
         onAttachView();
+        initScoreSpinner();
         adapter = new SpinnerCategoryAdapter(
                 this, android.R.layout.simple_spinner_item, categoryOptions);
 
@@ -59,6 +64,17 @@ public class CreateKeywordActivity extends AppCompatActivity implements  CreateK
         presenter = new CreateKeywordPresenter();
     }
 
+    private void initScoreSpinner(){
+        scoreOptions = new ArrayList<>();
+        scoreOptions.add("MAX");
+        scoreOptions.add("AVG");
+        scoreOptions.add("MIN");
+        scoreAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, scoreOptions);
+        scoreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerScore.setAdapter(scoreAdapter);
+        spinnerScore.setSelection(0);
+    }
 
     @Override
     public void onAttachView() {
@@ -92,7 +108,7 @@ public class CreateKeywordActivity extends AppCompatActivity implements  CreateK
     public void createTerm(View view){
         if(Validation.checkEmpty(editKeyword)){
             Category selected = (Category) spinnerCategory.getSelectedItem();
-            presenter.submitData(editKeyword.getText().toString(),selected.getId().toString());
+            presenter.submitData(editKeyword.getText().toString(),selected.getId().toString(),spinnerScore.getSelectedItem().toString());
         }
     }
 
