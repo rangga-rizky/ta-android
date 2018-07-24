@@ -21,6 +21,10 @@ public class ResponsePost {
     @Expose
     private String message;
 
+    @SerializedName("messages")
+    @Expose
+    private String messages;
+
     @SerializedName("data")
     @Expose
     private Token TokenData;
@@ -56,5 +60,13 @@ public class ResponsePost {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessages(String messages) {
+        this.messages = messages;
+    }
+
+    public String getMessages() {
+        return messages;
     }
 }
