@@ -33,14 +33,14 @@ import retrofit2.http.Query;
 
 public interface API {
 
-    public static String baseURL = "http://178.128.36.147/api/";
+    public static String baseURL = "http://parola.site/api/";
     Gson gson = new GsonBuilder()
             .setLenient()
             .create();
     OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
             .build();
     Retrofit client = new Retrofit.Builder()
             .client(okHttpClient)
@@ -102,6 +102,12 @@ public interface API {
 
     @FormUrlEncoded
     @POST("tweets/crawl/LAPOR1708")
-    public Call<ResponsePost> crawl();
+    public Call<ResponsePost> crawl(@Header("Authorization")String token,
+                                    @Field("limit")String limit);
+
+    @FormUrlEncoded
+    @POST("training-terms/generate-assoc")
+    public Call<ResponsePost> generateAssoc(@Header("Authorization")String token,
+                                    @Field("project_id")String limit);
 
 }

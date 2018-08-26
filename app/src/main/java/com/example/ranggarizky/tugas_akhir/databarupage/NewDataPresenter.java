@@ -7,6 +7,7 @@ import com.example.ranggarizky.tugas_akhir.Presenter;
 import com.example.ranggarizky.tugas_akhir.keywordpage.KeywordView;
 import com.example.ranggarizky.tugas_akhir.model.Category;
 import com.example.ranggarizky.tugas_akhir.model.ResponseDocument;
+import com.example.ranggarizky.tugas_akhir.model.ResponsePost;
 import com.example.ranggarizky.tugas_akhir.model.ResponseTerm;
 
 import java.io.IOException;
@@ -110,6 +111,41 @@ public class NewDataPresenter implements Presenter<NewDataView> {
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.e("ayam", "onFailure: ", t.fillInStackTrace());
                 mView.showToast("Failed to Connect Internet");
+
+            }
+        });
+    }
+
+    public void crawl() {
+        mView.showProgressdialog();
+
+        API apiService = API.client.create(API.class);
+        Call<ResponsePost> call = apiService.crawl(mView.getSessionManager().getToken(),"10");
+
+        //proses call
+        call.enqueue(new Callback<ResponsePost>() {
+            @Override
+            public void onResponse(Call<ResponsePost> call, Response<ResponsePost> response) {
+                if(response.code() == 200){
+                    mView.showToast(response.body().getMessages());
+                    loadData("1","");
+                }else{
+                    try {
+                        Log.d("ayam",response.errorBody().string().toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mView.showToast("Terdapat Kesalhan pada Server");
+                }
+                mView.hideProgressdialog();
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponsePost> call, Throwable t) {
+                Log.e("ayam", "onFailure: ", t.fillInStackTrace());
+                mView.showToast("Failed to Connect Internet");
+                mView.hideProgressdialog();
 
             }
         });

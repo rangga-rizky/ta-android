@@ -16,6 +16,8 @@ import java.util.List;
 
 public interface NewDataView extends BaseView {
     void showProgresBar();
+    void showProgressdialog();
+    void hideProgressdialog();
     void setRecyclerView(List<Document> documents);
     void updateRecyclerView(List<Document> documents);
     void setMetaData(DocumentMeta data);

@@ -79,7 +79,7 @@ public class CreateKeywordActivity extends AppCompatActivity implements  CreateK
     @Override
     public void onAttachView() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Mohon Tunggu");
+        progressDialog.setMessage("Adding keyword and build matrice");
         presenter.onAttach(this);
     }
 

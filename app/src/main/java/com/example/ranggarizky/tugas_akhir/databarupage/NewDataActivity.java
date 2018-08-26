@@ -1,5 +1,6 @@
 package com.example.ranggarizky.tugas_akhir.databarupage;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     private int maxItemsPerRequest = 35,currentPage = 1,totalPage = 2;
     private List<Document> documents = new ArrayList<>();
     private DocumentRecyclerViewAdapter mAdapter;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,8 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
 
     @Override
     public void onAttachView() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Crawl.. Crawl.. Crawl.");
         presenter.onAttach(this);
     }
 
@@ -138,7 +142,7 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
         CategoryDialog filterDialog =new CategoryDialog(this, spinnerAdapter, new OnSelectCategoryListener() {
             @Override
             public void onSelect(Category category) {
-                currentCategory = category.getCategory();
+                currentCategory = category.getId();
                 currentPage = 1;
                 presenter.loadData("1",currentCategory);
             }
@@ -146,6 +150,11 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
         filterDialog.show();
         presenter.loadCategory();
 
+    }
+
+    @OnClick(R.id.fab)
+    public void crawl(View view){
+        presenter.crawl();
     }
 
 
@@ -166,6 +175,16 @@ public class NewDataActivity extends AppCompatActivity implements  NewDataView{
     public void showProgresBar() {
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showProgressdialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressdialog() {
+        progressDialog.hide();
     }
 
     @Override
